@@ -10,6 +10,30 @@ loss, and 10-user team loads with a 48 GB DRAM offload tier.
 - **~1,700 t/s aggregate prefill**, ~103 t/s single-stream decode (DFlash spec decode)
 - **24x faster repeat prompts** (DRAM KV promotion vs re-prefill), bit-identical output
 
+## Credits / where this comes from
+
+This stack is assembled from community research — standing on these shoulders:
+
+- **[club-3090](https://github.com/noonghunna/club-3090)** (issue #1052 and the
+  `ultrafast` dflash2.yml recipe) — the base DFlash2-on-dual-3090 vLLM recipe and
+  the 51581 dense-KV patch lineage this launcher started from
+- **vLLM upstream PRs**, backported here into vLLM 0.29.0 site-packages:
+  - [#49472](https://github.com/vllm-project/vllm/pull/49472) — hybrid KV group-size
+    selector (+21% KV, lossless)
+  - [#52771](https://github.com/vllm-project/vllm/pull/52771) — stop zeroing KV-offload
+    hits under EAGLE/MTP-class speculative decoding (the fix that makes DRAM offload work)
+  - [#52807](https://github.com/vllm-project/vllm/pull/52807) — recurrent/hybrid group
+    load-boundary fix for offloading
+  - [#52923](https://github.com/vllm-project/vllm/pull/52923) — offload store-before-keys race
+  - [#48375](https://github.com/vllm-project/vllm/pull/48375) — mamba drop-eagle-block fix
+- **Model authors** (download from Hugging Face, see next section):
+  - Target model: [Frozenlock/Qwen3.8-27B-int4-AutoRound](https://huggingface.co/Frozenlock/Qwen3.8-27B-int4-AutoRound)
+    — INT4 W4A16 AutoRound quant of Qwen/Qwen3.8-27B (~18 GB, vision-capable, MTP head quantized in)
+  - Draft model: [incoai/Qwen3.8-27B-DFlash2](https://huggingface.co/incoai/Qwen3.8-27B-DFlash2)
+    via the W4A16 build we use ([syvai DFlash2-W4A16 packaging](https://huggingface.co/syvai), ~1.2 GB)
+- **vLLM docs**: [KV offloading usage](https://docs.vllm.ai/en/stable/features/kv_offloading/),
+  [conserving memory](https://docs.vllm.ai/en/stable/configuration/conserving_memory/)
+
 ## Hardware this was built and measured on
 
 | part | spec |
@@ -53,19 +77,28 @@ loss, and 10-user team loads with a 48 GB DRAM offload tier.
 
 ## Dependencies
 
+**System:** Linux, NVIDIA driver with SM86 (Ampere) support, systemd, ~40 GB disk
+for models, 128 GB RAM recommended (48 GB is reserved as the pinned KV offload tier).
+
 ```bash
-# Python 3.12 venv
+# 1. Python 3.12 venv with the exact vLLM version the patches target
 python3.12 -m venv ~/vllm-env
 source ~/vllm-env/bin/activate
-pip install vllm==0.29.0          # exact version the patches target
+pip install vllm==0.29.0 huggingface_hub
+# (vLLM wheels bundle torch, CUDA kernels, transformers — nothing else needed)
 
-# Models (HF token required for gated downloads)
+# 2. Models (~19 GB total; HF token required if either repo is gated)
+huggingface-cli login          # paste a token from https://huggingface.co/settings/tokens
 huggingface-cli download Frozenlock/Qwen3.8-27B-int4-AutoRound --local-dir ~/models/frozenlock-int4
 huggingface-cli download syvai/DFlash2-W4A16 --local-dir ~/models/dflash2-w4a16
 ```
 
-No other Python deps — vLLM wheels bundle torch/CUDA. System needs: NVIDIA driver
-(SM86), CUDA runtime via pip wheels, systemd.
+Model cards:
+- **Target** — `Frozenlock/Qwen3.8-27B-int4-AutoRound`: INT4/W4A16 AutoRound quant of
+  `Qwen/Qwen3.8-27B` (~18 GB). Vision-capable (image-text-to-text), MTP head quantized
+  in-tree so speculative decoding works out of the box.
+- **Drafter** — `syvai/DFlash2-W4A16`: W4A16 DFlash2 speculative draft model
+  (~1.2 GB), based on `incoai/Qwen3.8-27B-DFlash2`. n=7 draft tokens, ~46% acceptance.
 
 ## Install & run
 

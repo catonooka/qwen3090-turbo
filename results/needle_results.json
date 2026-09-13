@@ -1,0 +1,37 @@
+[
+ {
+  "depth": 0.05,
+  "prompt_tokens": 248185,
+  "wall_s": 259.3,
+  "found": true,
+  "reply": "4193"
+ },
+ {
+  "depth": 0.3,
+  "prompt_tokens": 248368,
+  "wall_s": 278.5,
+  "found": true,
+  "reply": "4193"
+ },
+ {
+  "depth": 0.55,
+  "prompt_tokens": 248734,
+  "wall_s": 279.7,
+  "found": true,
+  "reply": "4193"
+ },
+ {
+  "depth": 0.8,
+  "prompt_tokens": 248575,
+  "wall_s": 287.4,
+  "found": true,
+  "reply": "4193"
+ },
+ {
+  "depth": 0.95,
+  "prompt_tokens": 248219,
+  "wall_s": 826.1,
+  "found": true,
+  "reply": "4193"
+ }
+]

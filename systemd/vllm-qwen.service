@@ -1,0 +1,13 @@
+[Unit]
+Description=vLLM Qwen3.8-27B DFlash2 ultrafast on 2x3090 (qwen3090-turbo)
+After=network.target
+
+[Service]
+Type=simple
+User=aisever
+ExecStart=/bin/bash /home/aisever/qwen3090-turbo/launch/vllm-launch.sh
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,38 @@
+32 requests, sizes 50-100k, 10 concurrent users, DRAM offload on
+req prompt_toks   wall_s   ok reply
+  0       74203    161.3  True 'NEEDLE-00-916'
+  1       58075    113.2  True 'NEEDLE-01-754'
+  2       53001    202.5  True 'NEEDLE-02-617'
+  3       65126     71.7  True 'NEEDLE-03-275'
+  4       65141    297.6  True 'NEEDLE-04-574'
+  5       88875    359.2  True 'NEEDLE-05-253'
+  6      100280    480.7  True 'NEEDLE-06-875'
+  7       70123    250.2  True 'NEEDLE-07-593'
+  8       63976    406.2  True 'NEEDLE-08-654'
+  9       79105    540.4  True 'NEEDLE-09-821'
+ 10       86100    524.4  True 'NEEDLE-10-801'
+ 11       77912    548.0  True 'NEEDLE-11-211'
+ 12       80234    549.3  True 'NEEDLE-12-119'
+ 13       65984    560.7  True 'NEEDLE-13-116'
+ 14       56093    549.0  True 'NEEDLE-14-466'
+ 15       63008    549.1  True 'NEEDLE-15-268'
+ 16       73118    530.2  True 'NEEDLE-16-934'
+ 17       83186    554.0  True 'NEEDLE-17-931'
+ 18       61117    521.2  True 'NEEDLE-18-944'
+ 19       93089    534.3  True 'NEEDLE-19-717'
+ 20       96087    546.8  True 'NEEDLE-20-113'
+ 21       59895    523.1  True 'NEEDLE-21-202'
+ 22       58114    514.9  True 'NEEDLE-22-178'
+ 23       99138    536.2  True 'NEEDLE-23-800'
+ 24       95179    573.6  True 'NEEDLE-24-330'
+ 25       74012    574.3  True 'NEEDLE-25-946'
+ 26       96974    605.4  True 'NEEDLE-26-257'
+ 27       91134    607.3  True 'NEEDLE-27-544'
+ 28       56887    599.8  True 'NEEDLE-28-902'
+ 29       85224    593.2  True 'NEEDLE-29-765'
+ 30       84001    580.0  True 'NEEDLE-30-999'
+ 31       50185    551.9  True 'NEEDLE-31-847'
+
+TOTAL: 1736s | correct 32/32
+wall_s: min 71.7 p50 540.4 p90 593.2 max 607.3
+TEAMLOAD DONE

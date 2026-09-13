@@ -1,0 +1,8 @@
+calibration: 2600 toks for 2000 words -> need ~192307 words
+depth 0.05: 248185 toks, 259s -> HIT  | '4193'
+depth  0.3: 248368 toks, 278s -> HIT  | '4193'
+depth 0.55: 248734 toks, 280s -> HIT  | '4193'
+depth  0.8: 248575 toks, 287s -> HIT  | '4193'
+depth 0.95: 248219 toks, 826s -> HIT  | '4193'
+SCORE: 5/5
+DONE
